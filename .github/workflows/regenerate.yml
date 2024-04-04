@@ -24,7 +24,10 @@ jobs:
 
     - name: Create empty data directory
       if: steps.cache-downloads.outputs.cache-hit != 'true'
-      run: mkdir ./data
+      run: |
+        mkdir data
+        cd data
+        wget https://data.brickstore.dev/downloads.zip -O downloads.zip
 
     - name: Run BrickStore
       shell: bash
