@@ -1,0 +1,35 @@
+name: Regenerate Database
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 3,15 * * *' # run at 2 AM UTC
+
+jobs:
+  update:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+    - name: Set tag name
+      run: echo "TAGNAME=$(date +'%Y.%m.%d-%H.%M')" >> $GITHUB_ENV
+
+    - uses: actions/checkout@v3
+
+    - name: Run BrickStore
+      run: |
+        docker run --rm \
+               -e BRICKLINK_USERNAME="$BRICKLINK_USERNAME" \
+               -e BRICKLINK_PASSWORD="$BRICKLINK_PASSWORD" \
+               -e BRICKLINK_AFFILIATE_APIKEY="$BRICKLINK_AFFILIATE_APIKEY" \
+               -e REBRICKABLE_APIKEY="$REBRICKABLE_APIKEY" \
+               -v "./data:/data" \
+               --user $(id -u) \
+               --name "brickstore-backend" \
+               rgriebl/brickstore-backend:${BRICKSTORE_BUILD_NUMBER}
+
+    - uses: ncipollo/release-action@v1
+      with:
+        artifacts: "data/cache/BrickStore/downloads.zip,data/db/database-v*.lzma"
+        commit: main
+        tag: ${{ env.TAGNAME }}
