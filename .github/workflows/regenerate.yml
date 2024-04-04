@@ -16,17 +16,17 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: Cache downloads
-      id: cache-downloads
+      id: data-cache
       uses: actions/cache@v4
       with:
-        path: data
-        key: cache-downloads
+        path: data/cache
+        key: data-cache
 
     - name: Create empty data directory
-      if: steps.cache-downloads.outputs.cache-hit != 'true'
+      if: steps.data-cache.outputs.cache-hit != 'true'
       run: |
-        mkdir data
-        wget https://data.brickstore.dev/downloads.zip -O data/downloads.zip
+        mkdir -p data/cache/BrickStore
+        wget https://data.brickstore.dev/downloads.zip -O data/cache/BrickStore/downloads.zip
 
     - name: Run BrickStore
       shell: bash
