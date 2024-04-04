@@ -1,5 +1,6 @@
 name: Regenerate Database
-
+env:
+  BRICKSTORE_BUILD_NUMBER: '1208'
 on:
   workflow_dispatch:
   schedule:
@@ -16,13 +17,18 @@ jobs:
 
     - uses: actions/checkout@v3
 
+    - name: "TODO: Cache"
+      run: |
+        mkdir ./data
+
     - name: Run BrickStore
+      shell: bash
       run: |
         docker run --rm \
-               -e BRICKLINK_USERNAME="$BRICKLINK_USERNAME" \
-               -e BRICKLINK_PASSWORD="$BRICKLINK_PASSWORD" \
-               -e BRICKLINK_AFFILIATE_APIKEY="$BRICKLINK_AFFILIATE_APIKEY" \
-               -e REBRICKABLE_APIKEY="$REBRICKABLE_APIKEY" \
+               -e BRICKLINK_USERNAME="${{ secrets.BRICKLINK_USERNAME }}" \
+               -e BRICKLINK_PASSWORD="${{ secrets.BRICKLINK_PASSWORD }}" \
+               -e BRICKLINK_AFFILIATE_APIKEY="${{ secrets.BRICKLINK_AFFILIATE_APIKEY }}" \
+               -e REBRICKABLE_APIKEY="${{ secrets.REBRICKABLE_APIKEY }}" \
                -v "./data:/data" \
                --user $(id -u) \
                --name "brickstore-backend" \
