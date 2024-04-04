@@ -26,18 +26,18 @@ jobs:
       if: steps.cache-downloads.outputs.cache-hit != 'true'
       run: |
         mkdir data
-        cd data
-        wget https://data.brickstore.dev/downloads.zip -O downloads.zip
+        wget https://data.brickstore.dev/downloads.zip -O data/downloads.zip
 
     - name: Run BrickStore
       shell: bash
       run: |
+        find $PWD/data
         docker run --rm \
                -e BRICKLINK_USERNAME="${{ secrets.BRICKLINK_USERNAME }}" \
                -e BRICKLINK_PASSWORD="${{ secrets.BRICKLINK_PASSWORD }}" \
                -e BRICKLINK_AFFILIATE_APIKEY="${{ secrets.BRICKLINK_AFFILIATE_APIKEY }}" \
                -e REBRICKABLE_APIKEY="${{ secrets.REBRICKABLE_APIKEY }}" \
-               -v "./data:/data" \
+               -v "$PWD/data:/data" \
                --user $(id -u) \
                --name "brickstore-backend" \
                rgriebl/brickstore-backend:${{ vars.BRICKSTORE_BUILD_NUMBER }}
