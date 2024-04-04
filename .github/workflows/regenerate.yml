@@ -2,7 +2,7 @@ name: Regenerate Database
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 3,15 * * *' # run at 2 AM UTC
+    - cron: '0 3,9,15,21 * * *' # run every 6 hours
 
 jobs:
   update:
@@ -11,7 +11,7 @@ jobs:
       contents: write
     steps:
     - name: Set tag name
-      run: echo "TAGNAME=$(date +'%Y.%m.%d-%H.%M')" >> $GITHUB_ENV
+      run: echo "TAGNAME=v$(date +'%Y.%m.%d-%H.%M')" >> $GITHUB_ENV
 
     - uses: actions/checkout@v3
 
