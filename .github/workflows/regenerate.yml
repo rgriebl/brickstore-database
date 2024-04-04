@@ -40,7 +40,7 @@ jobs:
                -v "./data:/data" \
                --user $(id -u) \
                --name "brickstore-backend" \
-               rgriebl/brickstore-backend:${{ env.BRICKSTORE_BUILD_NUMBER }}
+               rgriebl/brickstore-backend:${{ vars.BRICKSTORE_BUILD_NUMBER }}
 
     - uses: ncipollo/release-action@v1
       with:
