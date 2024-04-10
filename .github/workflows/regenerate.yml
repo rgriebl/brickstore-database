@@ -25,7 +25,7 @@ jobs:
           data-cache-
 
     - name: Create empty data directory
-      if: steps.data-cache.outputs.cache-hit != 'true'
+      if: steps.data-cache.outputs.cache-matched-key == ''
       run: |
         mkdir -p data/cache/BrickStore
         wget https://data.brickstore.dev/downloads.zip -O data/cache/BrickStore/downloads.zip
