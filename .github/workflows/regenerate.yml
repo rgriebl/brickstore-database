@@ -16,7 +16,7 @@ jobs:
     - name: Set tag name
       run: echo "TAGNAME=v$(date +'%Y.%m.%d-%H.%M')" >> $GITHUB_ENV
 
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Restore cache
       id: restore-cache
