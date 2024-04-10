@@ -20,7 +20,9 @@ jobs:
       uses: actions/cache@v4
       with:
         path: data/cache
-        key: data-cache
+        key: data-cache-${{ env.TAGNAME }}
+        restore-keys: |
+          data-cache-
 
     - name: Create empty data directory
       if: steps.data-cache.outputs.cache-hit != 'true'
