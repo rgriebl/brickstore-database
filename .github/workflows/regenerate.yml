@@ -19,7 +19,7 @@ jobs:
       id: restore-cache
       uses: actions/cache/restore@v4
       with:
-        path: data/cache
+        path: data/cache/downloads.zip
         key: data-cache-${{ env.TAGNAME }}
         restore-keys: |
           data-cache-
@@ -46,7 +46,7 @@ jobs:
 
     - uses: actions/cache/save@v4
       with:
-        path: data/cache
+        path: data/cache/downloads.zip
         key: ${{ steps.restore-cache.outputs.cache-primary-key }}
 
     - uses: ncipollo/release-action@v1
