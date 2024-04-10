@@ -15,9 +15,9 @@ jobs:
 
     - uses: actions/checkout@v3
 
-    - name: Cache downloads
-      id: data-cache
-      uses: actions/cache@v4
+    - name: Restore cache
+      id: restore-cache
+      uses: actions/cache/restore@v4
       with:
         path: data/cache
         key: data-cache-${{ env.TAGNAME }}
@@ -25,7 +25,7 @@ jobs:
           data-cache-
 
     - name: Create empty data directory
-      if: steps.data-cache.outputs.cache-matched-key == ''
+      if: steps.restore-cache.outputs.cache-matched-key == ''
       run: |
         mkdir -p data/cache/BrickStore
         wget https://data.brickstore.dev/downloads.zip -O data/cache/BrickStore/downloads.zip
@@ -43,6 +43,11 @@ jobs:
                --user $(id -u) \
                --name "brickstore-backend" \
                rgriebl/brickstore-backend:${{ vars.BRICKSTORE_BUILD_NUMBER }}
+
+    - uses: actions/cache/save@v4
+      with:
+        path: data/cache
+        key: ${{ steps.restore-cache.outputs.cache-primary-key }}
 
     - uses: ncipollo/release-action@v1
       with:
