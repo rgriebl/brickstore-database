@@ -3,6 +3,9 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '10 3,9,15,21 * * *' # run 10 past every 6 hours
+    
+env:
+  CACHE_CONTENT: "data/cache/BrickStore/downloads.zip"
 
 jobs:
   regenerate:
@@ -19,7 +22,7 @@ jobs:
       id: restore-cache
       uses: actions/cache/restore@v4
       with:
-        path: data/cache/downloads.zip
+        path: ${{ env.CACHE_CONTENT }}
         key: data-cache-${{ env.TAGNAME }}
         restore-keys: |
           data-cache-
@@ -46,7 +49,7 @@ jobs:
 
     - uses: actions/cache/save@v4
       with:
-        path: data/cache/downloads.zip
+        path: ${{ env.CACHE_CONTENT }}
         key: ${{ steps.restore-cache.outputs.cache-primary-key }}
 
     - uses: ncipollo/release-action@v1
