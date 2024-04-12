@@ -45,7 +45,8 @@ jobs:
                -v "$PWD/data:/data" \
                --user $(id -u) \
                --name "brickstore-backend" \
-               rgriebl/brickstore-backend:${{ vars.BRICKSTORE_BUILD_NUMBER }}
+               rgriebl/brickstore-backend:${{ vars.BRICKSTORE_BUILD_NUMBER }} \
+          2>&1 | tee regenerate.log
 
     - uses: actions/cache/save@v4
       with:
@@ -54,6 +55,6 @@ jobs:
 
     - uses: ncipollo/release-action@v1
       with:
-        artifacts: "data/cache/BrickStore/downloads.zip,data/logs/*,data/db/*.lzma"
+        artifacts: "data/cache/BrickStore/downloads.zip,regenerate.log,data/db/*.lzma"
         commit: main
         tag: ${{ env.TAGNAME }}
