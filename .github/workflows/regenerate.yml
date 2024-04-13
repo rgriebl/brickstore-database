@@ -6,6 +6,7 @@ on:
     
 env:
   CACHE_CONTENT: "data/cache/BrickStore/downloads.zip"
+  DOCKER_IMAGE: "${{ vars.BRICKSTORE_DOCKER_IMAGE }}:${{ vars.BRICKSTORE_BUILD_NUMBER }}"
 
 jobs:
   regenerate:
@@ -37,6 +38,7 @@ jobs:
       shell: bash
       run: |
         find $PWD/data
+        docker pull "${DOCKER_IMAGE}" 
         docker run --rm \
                -e BRICKLINK_USERNAME="${{ secrets.BRICKLINK_USERNAME }}" \
                -e BRICKLINK_PASSWORD="${{ secrets.BRICKLINK_PASSWORD }}" \
@@ -45,7 +47,7 @@ jobs:
                -v "$PWD/data:/data" \
                --user $(id -u) \
                --name "brickstore-backend" \
-               rgriebl/brickstore-backend:${{ vars.BRICKSTORE_BUILD_NUMBER }} \
+               "$DOCKER_IMAGE" \
           2>&1 | tee regenerate.log
 
     - uses: actions/cache/save@v4
