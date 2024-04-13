@@ -49,6 +49,7 @@ jobs:
                --name "brickstore-backend" \
                "$DOCKER_IMAGE" \
           2>&1 | tee regenerate.log
+        find $PWD/data
 
     - uses: actions/cache/save@v4
       with:
