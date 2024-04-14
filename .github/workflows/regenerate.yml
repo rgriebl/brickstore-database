@@ -34,7 +34,6 @@ jobs:
     - name: Run BrickStore
       shell: bash
       run: |
-        find $PWD/data
         docker pull "${DOCKER_IMAGE}" 
         docker run --rm \
                -e BRICKLINK_USERNAME="${{ secrets.BRICKLINK_USERNAME }}" \
@@ -46,7 +45,6 @@ jobs:
                --name "brickstore-backend" \
                "$DOCKER_IMAGE" \
           2>&1 | tee regenerate.log
-        find $PWD/data
 
     - uses: ncipollo/release-action@v1
       with:
