@@ -5,7 +5,6 @@ on:
     - cron: '10 3,9,15,21 * * *' # run 10 past every 6 hours
     
 env:
-  CACHE_CONTENT: "data/cache/BrickStore/downloads.zip"
   DOCKER_IMAGE: "${{ vars.BRICKSTORE_DOCKER_IMAGE }}:${{ vars.BRICKSTORE_BUILD_NUMBER }}"
 
 jobs:
@@ -19,20 +18,18 @@ jobs:
 
     - uses: actions/checkout@v4
 
-    - name: Restore cache
-      id: restore-cache
-      uses: actions/cache/restore@v4
+    - name: Cache credentials
+      uses: actions/cache@v4
       with:
-        path: ${{ env.CACHE_CONTENT }}
-        key: data-cache-${{ env.TAGNAME }}
-        restore-keys: |
-          data-cache-
+        path: "data/cache/BrickStore/credentials.conf"  
+        key: credentials-cache
 
-    - name: Create empty data directory
-      if: steps.restore-cache.outputs.cache-matched-key == ''
+    - name: Retrieve last run data
+      shell: bash
       run: |
         mkdir -p data/cache/BrickStore
-        wget https://data.brickstore.dev/downloads.zip -O data/cache/BrickStore/downloads.zip
+        wget https://github.com/rgriebl/brickstore-database/releases/latest/download/downloads.zip \
+             -O data/cache/BrickStore/downloads.zip
 
     - name: Run BrickStore
       shell: bash
@@ -50,11 +47,6 @@ jobs:
                "$DOCKER_IMAGE" \
           2>&1 | tee regenerate.log
         find $PWD/data
-
-    - uses: actions/cache/save@v4
-      with:
-        path: ${{ env.CACHE_CONTENT }}
-        key: ${{ steps.restore-cache.outputs.cache-primary-key }}
 
     - uses: ncipollo/release-action@v1
       with:
