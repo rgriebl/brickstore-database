@@ -2,7 +2,7 @@ name: Regenerate Database
 on:
   workflow_dispatch:
   schedule:
-    - cron: '10 3,9,15,21 * * *' # run 10 past every 6 hours
+    - cron: '2 * * * *' # run 2min past every hour
     
 env:
   DOCKER_IMAGE: "${{ vars.BRICKSTORE_DOCKER_IMAGE }}:${{ vars.BRICKSTORE_BUILD_NUMBER }}"
