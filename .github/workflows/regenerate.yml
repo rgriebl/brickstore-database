@@ -6,9 +6,9 @@ on:
         description: "Reuse inventory data from latest release?"
         type: boolean
         required: true
-        default: false
+        default: true
   schedule:
-    - cron: '2 * * * *' # run 2min past every hour
+    - cron: '51 * * * *' # run 2min past every hour
     
 env:
   DOCKER_IMAGE: "${{ vars.BRICKSTORE_DOCKER_IMAGE }}:${{ vars.BRICKSTORE_BUILD_NUMBER }}"
