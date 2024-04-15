@@ -23,8 +23,7 @@ jobs:
       run: |
         mkdir -p data/cache/BrickStore
         echo "TAGNAME=v$(date +'%Y.%m.%d-%H.%M')" >> $GITHUB_ENV
-
-    - uses: actions/checkout@v4
+        find .
 
     - name: Retrieve last run data
       if: ${{ ! inputs.redownload_inventory_data }}
