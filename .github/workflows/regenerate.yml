@@ -33,7 +33,7 @@ jobs:
         key: credentials-cache
 
     - name: Retrieve last run data
-      if: ${{ !github.event.inputs.redownload_inventory_data }}
+      if: ${{ ! github.event.inputs.redownload_inventory_data }}
       shell: bash
       run: |
         wget https://github.com/rgriebl/brickstore-database/releases/latest/download/downloads.zip \
