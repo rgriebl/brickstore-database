@@ -26,12 +26,6 @@ jobs:
 
     - uses: actions/checkout@v4
 
-    - name: Cache credentials
-      uses: actions/cache@v4
-      with:
-        path: "data/cache/BrickStore/credentials.conf"  
-        key: credentials-cache
-
     - name: Retrieve last run data
       if: ${{ ! inputs.redownload_inventory_data }}
       shell: bash
