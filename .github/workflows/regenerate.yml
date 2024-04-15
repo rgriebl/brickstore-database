@@ -1,6 +1,12 @@
 name: Regenerate Database
 on:
   workflow_dispatch:
+    inputs:
+      reuse_latest_release:
+        description: "Reuse inventory data from latest release?"
+        type: boolean
+        required: true
+        default: false
   schedule:
     - cron: '2 * * * *' # run 2min past every hour
     
@@ -13,8 +19,10 @@ jobs:
     permissions:
       contents: write
     steps:
-    - name: Set tag name
-      run: echo "TAGNAME=v$(date +'%Y.%m.%d-%H.%M')" >> $GITHUB_ENV
+    - name: Prepare
+      run: |
+        echo "TAGNAME=v$(date +'%Y.%m.%d-%H.%M')" >> $GITHUB_ENV
+        mkdir -p data/cache/BrickStore
 
     - uses: actions/checkout@v4
 
@@ -25,9 +33,9 @@ jobs:
         key: credentials-cache
 
     - name: Retrieve last run data
+      if: github.event.inputs.reuse_latest_release
       shell: bash
       run: |
-        mkdir -p data/cache/BrickStore
         wget https://github.com/rgriebl/brickstore-database/releases/latest/download/downloads.zip \
              -O data/cache/BrickStore/downloads.zip
 
