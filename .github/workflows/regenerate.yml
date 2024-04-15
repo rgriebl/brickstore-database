@@ -2,11 +2,11 @@ name: Regenerate Database
 on:
   workflow_dispatch:
     inputs:
-      reuse_latest_release:
-        description: "Reuse inventory data from latest release?"
+      redownload_inventory_data:
+        description: "Re-download all the inventory data?"
         type: boolean
         required: true
-        default: true
+        default: false
   schedule:
     - cron: '51 * * * *' # run 2min past every hour
     
@@ -33,7 +33,7 @@ jobs:
         key: credentials-cache
 
     - name: Retrieve last run data
-      if: github.event.inputs.reuse_latest_release
+      if: ${{ !github.event.inputs.redownload_inventory_data }}
       shell: bash
       run: |
         wget https://github.com/rgriebl/brickstore-database/releases/latest/download/downloads.zip \
